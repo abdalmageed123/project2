@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -5,25 +7,26 @@ import 'package:project2/core/shared/components/showDialog.dart';
 
 Future<void> checkConnectionAndNavigate(
   context, {
-  bool of = false,
   bool b = true,
-  String? page,
+
+  Function? function,
 }) async {
   final result = await Connectivity().checkConnectivity();
 
   if (result[0] != ConnectivityResult.none) {
     // في اتصال - الانتقال للهوم
-    Future.delayed(const Duration(seconds: 2), () {
-      
-      if (page != null) {
-      
-        if (of) {
-          Get.offAllNamed(page);
-        } else {
-          Get.toNamed(page);
-        }
-      }
-    });
+    if (b == true) {
+      Future.delayed(
+        const Duration(seconds: 2),
+        function as FutureOr Function()?,
+      );
+    } else {
+      Navigator.pop(context);
+      Future.delayed(
+        const Duration(seconds: 2),
+        function as FutureOr Function()?,
+      );
+    }
   } else {
     // لا يوجد اتصال - إظهار نافذة تنبيه
     if (b) {
@@ -38,7 +41,7 @@ Future<void> checkConnectionAndNavigate(
         action: [
           ElevatedButton(
             onPressed: () {
-              checkConnectionAndNavigate(context, b: false,page: page,of: of);
+              checkConnectionAndNavigate(context, b: false, function: function);
               //Navigator.pop(context);// إعادة المحاولة
             },
             child: const Text('إعادة المحاولة'),

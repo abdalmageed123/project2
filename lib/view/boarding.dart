@@ -10,6 +10,7 @@ import 'package:project2/core/models/onboardingmodel.dart';
 import 'package:project2/core/services/checknet.dart';
 import 'package:project2/core/services/sharedprefrence.dart';
 import 'package:project2/core/shared/components/anmation.dart';
+import 'package:project2/core/shared/components/button.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -55,14 +56,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Sharedpreferences sharedpreferences = Get.find();
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-print(width);
-print(height);
-    LocalController controller = Get.put(LocalController());
-    return Scaffold(
+    print(width);
+    print(height);
+    LocalController controller = Get.find();
+    return Scaffold(backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('0'.tr,style: TextStyle(color:  AppColor.color1,fontSize: 20.sp),),
+        title: Text(
+          '0'.tr,
+          style: TextStyle(color: AppColor.color1, fontSize: 20.sp),
+        ),
         actions: [
           // Language selector dropdown
           PopupMenuButton<String>(
@@ -92,7 +97,7 @@ print(height);
                           height: 24.h,
                         ), // USA flag
                         SizedBox(width: 8.w),
-                        Text("English",style: TextStyle(fontSize: 14.sp),),
+                        Text("English", style: TextStyle(fontSize: 14.sp)),
                       ],
                     ),
                   ),
@@ -106,7 +111,7 @@ print(height);
                           height: 24.h,
                         ), // Saudi flag
                         SizedBox(width: 8.w),
-                        Text("العربية",style:  TextStyle(fontSize: 14.sp)),
+                        Text("العربية", style: TextStyle(fontSize: 14.sp)),
                       ],
                     ),
                   ),
@@ -133,7 +138,7 @@ print(height);
                       },
                       itemBuilder: (context, index) {
                         return Padding(
-                          padding:  EdgeInsets.all(
+                          padding: EdgeInsets.all(
                             10.w,
                           ), // تقليل padding حول الصورة والنص
                           child: Column(
@@ -142,16 +147,14 @@ print(height);
                               Image.asset(
                                 pages[index].image,
                                 height:
-                                   270.h, // تخصيص ارتفاع الصورة بالنسبة لحجم الشاشة
+                                    270.h, // تخصيص ارتفاع الصورة بالنسبة لحجم الشاشة
                               ),
-                              SizedBox(
-                                height:24.h,
-                              ), // مسافة بين الصورة والنص
+                              SizedBox(height: 24.h), // مسافة بين الصورة والنص
                               Text(
                                 pages[index].title.tr,
                                 style: TextStyle(
                                   fontSize:
-                                     24.sp, // حجم الخط بالنسبة لعرض الشاشة
+                                      24.sp, // حجم الخط بالنسبة لعرض الشاشة
                                   fontWeight: FontWeight.bold,
                                 ),
                                 textAlign: TextAlign.center,
@@ -184,34 +187,15 @@ print(height);
                       (index) => buildDot(index, _currentPage),
                     ),
                   ),
-                  SizedBox(height: 20.h), // مسافة أسفل الدوائر
-                  Container(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        checkConnectionAndNavigate(context,page: AppString.home,of: true);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColor.color1,
-                        foregroundColor: Colors.white,
-                        padding: EdgeInsets.symmetric(
-                          vertical: 14.h,
-                        ), // حجم الزر بالنسبة للطول
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.r),
-                        ),
-                      ),
-                      child: Text(
-                        '1'.tr,
-                        style: TextStyle(
-                          fontSize:
-                              16.sp, // حجم النص بالنسبة لعرض الشاشة
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height:24.h), // مسافة أسفل الزر
+                  SizedBox(height: 20.h), 
+                  Elevatedbutton(onPressed:(){checkConnectionAndNavigate(
+                          context,
+                          function: () {
+                            Get.offNamed(AppString.whatappnumber);
+                            sharedpreferences.set(key: 'step', value: '1');
+                          },
+                        );} ,text:'1'.tr,),
+                  SizedBox(height: 24.h), // مسافة أسفل الزر
                 ],
               ),
         ),

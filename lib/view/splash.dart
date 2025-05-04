@@ -17,14 +17,21 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Sharedpreferences sharedpreferences = Get.find();
-    String ?page = sharedpreferences.get(key: 'boarding');
-    if (page != null) {
-       //page = AppString.home;
-    } else {
+    String? page = sharedpreferences.get(key: 'step');
+    if (page == '2') {
+      page = AppString.chooserolescreen;
+    }if (page == '1') {
+      page = AppString.whatappnumber;
+    }  else {
       page = AppString.boarding;
     }
 
-    checkConnectionAndNavigate(context, page: page,of:true);
+    checkConnectionAndNavigate(
+      context,
+      function: () {
+        Get.offAllNamed(page!);
+      },
+    );
   }
 
   @override

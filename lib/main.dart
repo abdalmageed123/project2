@@ -8,11 +8,11 @@ import 'package:project2/core/services/crud.dart';
 import 'package:project2/core/services/sharedprefrence.dart';
 import 'package:project2/core/shared/components/showDialog.dart';
 import 'package:project2/core/shared/routes/routes.dart';
+import 'package:project2/features/pages/screen/teachermain.dart';
 import 'package:project2/view/drawer/aboutus.dart';
 import 'package:project2/view/drawer/privacy.dart';
 import 'package:project2/view/drawer/refundpolicy.dart';
 import 'package:project2/view/drawer/term.dart';
-import 'package:project2/view/splash.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,20 +29,20 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     LocalController controller = Get.put(LocalController());
-    //  Sharedpreferences s = Get.find();
+
     return ScreenUtilInit(
       designSize: Size(360, 773),
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
         return GetMaterialApp(
-          initialRoute: AppString.splash,
+          home: TeacherMainScreen(),
+          //initialRoute: AppString.splash,
           translations: Translation(),
           locale: controller.language,
           getPages: routes,
           debugShowCheckedModeBanner: false,
           theme: controller.theme,
-          home: SplashScreen(),
         );
       },
     );
@@ -69,6 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    Sharedpreferences sharedpreferences = Get.find();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -80,9 +81,10 @@ class _MyHomePageState extends State<MyHomePage> {
               (controller) => ListView(
                 padding: EdgeInsets.zero,
                 children: [
-                  DrawerHeader(
-                    child: Icon(Icons.menu, size: 48.sp), // حجم أيقونة متجاوب
-                  ),
+                  SizedBox(height: 80.h),
+                  Icon(Icons.menu, size: 48.sp),
+                  SizedBox(height: 20.h),
+                  const Divider(),
                   ListTile(
                     leading: Icon(Icons.info_outline, size: 24.sp),
                     title: Text('about'.tr, style: TextStyle(fontSize: 16.sp)),
@@ -109,14 +111,14 @@ class _MyHomePageState extends State<MyHomePage> {
                   ListTile(
                     leading: Icon(Icons.star, size: 24.sp),
                     title: Text('rate'.tr, style: TextStyle(fontSize: 16.sp)),
-                    onTap: () {},
+                    onTap: () {
+                      showDialog2(context);
+                    },
                   ),
                   ListTile(
                     leading: Icon(Icons.share, size: 24.sp),
                     title: Text('share'.tr, style: TextStyle(fontSize: 16.sp)),
-                    onTap: () {
-                      showDialog2(context);
-                    },
+                    onTap: () {},
                   ),
                   const Divider(),
                   Padding(
@@ -135,10 +137,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     children: [
                       TextButton(
                         onPressed: () => controller.changelang('ar'),
-                        child: Text(
-                          'arabic'.tr,
-                          style: TextStyle(fontSize: 14.sp),
-                        ),
                         style: TextButton.styleFrom(
                           backgroundColor:
                               controller.language!.languageCode == 'ar'
@@ -146,19 +144,23 @@ class _MyHomePageState extends State<MyHomePage> {
                                   : Colors.grey[200],
                           foregroundColor: Colors.white,
                         ),
+                        child: Text(
+                          'arabic'.tr,
+                          style: TextStyle(fontSize: 14.sp),
+                        ),
                       ),
                       TextButton(
                         onPressed: () => controller.changelang('en'),
-                        child: Text(
-                          'english'.tr,
-                          style: TextStyle(fontSize: 14.sp),
-                        ),
                         style: TextButton.styleFrom(
                           backgroundColor:
                               controller.language!.languageCode == 'en'
                                   ? Colors.redAccent
                                   : Colors.grey[200],
                           foregroundColor: Colors.white,
+                        ),
+                        child: Text(
+                          'english'.tr,
+                          style: TextStyle(fontSize: 14.sp),
                         ),
                       ),
                     ],
@@ -189,7 +191,15 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 20.h),
+                  //SizedBox(height: 20.h),
+                  ListTile(
+                    leading: Icon(Icons.logout, size: 24.sp),
+                    title: Text('logout'.tr, style: TextStyle(fontSize: 16.sp)),
+                    onTap: () {
+                      Get.offNamed(AppString.whatappnumber);
+                      sharedpreferences.set(key: 'step', value: '1');
+                    },
+                  ), //SizedBox(height: 20.h),
                   Center(
                     child: Text(
                       '${'version'.tr} 1.0.0',
